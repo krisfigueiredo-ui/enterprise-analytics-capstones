@@ -27,7 +27,7 @@ These are not the original client measures. They use generic table and field nam
 
 **West Virginia University capstone · Project Team Leader · January-April 2025**
 
-Kristofor led a seven-person team that developed a reusable SKU-level safety-stock strategy for a 27-product portfolio. The analytical approach included:
+Kristofor led a seven-person remote team at West Virginia University that developed a reusable SKU-level safety-stock strategy for a 27-product portfolio. The engagement included a project site visit with Tractor Beverage Company in Columbus, Ohio. The analytical approach included:
 
 - ABC segmentation
 - Service-level targets
