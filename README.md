@@ -1,6 +1,9 @@
 # Enterprise Analytics Capstones
 
-Public, confidentiality-safe case studies for two real-world University of Miami MSBA capstone engagements completed by Kristofor Figueiredo.
+Case studies from two university capstones completed with enterprise partners:
+
+- City National Bank of Florida, University of Miami M.S. in Business Analytics
+- Tractor Beverage Company, West Virginia University B.S.B.A. in Supply Chain Management
 
 ## City National Bank of Florida: IT Asset Lifecycle and Risk
 
@@ -22,6 +25,8 @@ These are not the original client measures. They use generic table and field nam
 
 ## Tractor Beverage Company: Inventory Planning
 
+**West Virginia University capstone · Project Team Leader · January-April 2025**
+
 Kristofor led a seven-person team that developed a reusable SKU-level safety-stock strategy for a 27-product portfolio. The analytical approach included:
 
 - ABC segmentation
@@ -30,13 +35,11 @@ Kristofor led a seven-person team that developed a reusable SKU-level safety-sto
 - Forecast error monitoring
 - Bootstrap and Monte Carlo scenario analysis
 
+The team set SKU-level service targets of 85-95%. Backtesting indicated the model could have prevented approximately 80% of prior stockouts on key items while improving return on inventory investment by more than 20%.
+
 [Open the public synthetic inventory-planning demonstration](https://krisfigueiredo-ui.github.io/tractor-synthetic-inventory.html)
 
-The public demonstration uses fictional SKU records and illustrative results. It does not include client demand history, costs, forecasts, product economics, systems, or original deliverables.
-
-## Confidentiality standard
-
-This repository contains résumé-level engagement context and newly created portfolio examples only. It does not publish client exports, Power BI files, internal data models, original DAX, dashboards, source records, confidential thresholds, or NDA-covered materials.
+Dashboard and DAX examples use demonstration data and newly written portfolio measures.
 
 ## Portfolio
 
