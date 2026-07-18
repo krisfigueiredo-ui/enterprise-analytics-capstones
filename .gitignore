@@ -1,0 +1,7 @@
+.DS_Store
+*.pbix
+*.pbit
+*.xlsx
+*.csv
+client-data/
+source-exports/

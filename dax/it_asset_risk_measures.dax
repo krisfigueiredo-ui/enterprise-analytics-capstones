@@ -1,0 +1,147 @@
+// IT Asset Lifecycle and Risk
+// 19 generic portfolio examples written for this public repository.
+// These are not client measures and do not reproduce internal business rules.
+
+// 01. Distinct asset population
+Total Assets :=
+DISTINCTCOUNT ( Assets[AssetID] )
+
+// 02. Assets currently inside the supported lifecycle window
+Supported Assets :=
+CALCULATE (
+    [Total Assets],
+    Assets[LifecycleStatus] = "Supported"
+)
+
+// 03. Share of assets currently supported
+Supported Rate :=
+DIVIDE ( [Supported Assets], [Total Assets], 0 )
+
+// 04. Assets that meet the generic public risk flag
+At Risk Assets :=
+CALCULATE (
+    [Total Assets],
+    Assets[RiskFlag] = TRUE ()
+)
+
+// 05. At-risk share of the active asset population
+At Risk Rate :=
+DIVIDE ( [At Risk Assets], [Total Assets], 0 )
+
+// 06. Assets already beyond their support date
+Past End Of Support Assets :=
+CALCULATE (
+    [Total Assets],
+    FILTER (
+        Assets,
+        NOT ISBLANK ( Assets[EndOfSupportDate] )
+            && Assets[EndOfSupportDate] < TODAY ()
+    )
+)
+
+// 07. Assets reaching end of support during the next 12 months
+End Of Support Next 12 Months :=
+CALCULATE (
+    [Total Assets],
+    FILTER (
+        Assets,
+        Assets[EndOfSupportDate] >= TODAY ()
+            && Assets[EndOfSupportDate] <= EDATE ( TODAY (), 12 )
+    )
+)
+
+// 08. Assets without a usable end-of-support date
+Unknown End Of Support Date :=
+CALCULATE (
+    [Total Assets],
+    ISBLANK ( Assets[EndOfSupportDate] )
+)
+
+// 09. Completeness of lifecycle-date coverage
+Lifecycle Date Completeness :=
+DIVIDE (
+    [Total Assets] - [Unknown End Of Support Date],
+    [Total Assets],
+    0
+)
+
+// 10. Assets connected to at least one legacy dependency
+Legacy Dependency Assets :=
+CALCULATE (
+    DISTINCTCOUNT ( AssetDependencies[AssetID] ),
+    AssetDependencies[IsLegacyDependency] = TRUE ()
+)
+
+// 11. Assets connected to a high-tier dependency
+High Dependency Assets :=
+CALCULATE (
+    DISTINCTCOUNT ( AssetDependencies[AssetID] ),
+    AssetDependencies[DependencyTier] = "High"
+)
+
+// 12. Intersection of elevated asset risk and high dependency exposure
+High Risk High Dependency Assets :=
+CALCULATE (
+    DISTINCTCOUNT ( AssetDependencies[AssetID] ),
+    AssetDependencies[DependencyTier] = "High",
+    TREATAS (
+        CALCULATETABLE (
+            VALUES ( Assets[AssetID] ),
+            Assets[RiskFlag] = TRUE ()
+        ),
+        AssetDependencies[AssetID]
+    )
+)
+
+// 13. Assets with an assigned accountable owner
+Assets With Owner :=
+CALCULATE (
+    [Total Assets],
+    NOT ISBLANK ( Assets[OwnerID] )
+)
+
+// 14. Completeness of ownership assignment
+Ownership Completeness :=
+DIVIDE ( [Assets With Owner], [Total Assets], 0 )
+
+// 15. Assets supporting a critical business service
+Critical Service Assets :=
+CALCULATE (
+    [Total Assets],
+    Assets[BusinessCriticality] = "Critical"
+)
+
+// 16. Generic remediation candidate population
+Remediation Candidates :=
+CALCULATE (
+    [Total Assets],
+    FILTER (
+        Assets,
+        Assets[RiskFlag] = TRUE ()
+            && Assets[RemediationStatus] <> "Complete"
+    )
+)
+
+// 17. Average asset age expressed in years
+Average Asset Age Years :=
+AVERAGEX (
+    FILTER ( Assets, NOT ISBLANK ( Assets[InstallDate] ) ),
+    DIVIDE ( DATEDIFF ( Assets[InstallDate], TODAY (), DAY ), 365.25 )
+)
+
+// 18. Risk-weighted asset exposure using a generic 0-100 score
+Risk Weighted Asset Score :=
+SUMX (
+    VALUES ( Assets[AssetID] ),
+    COALESCE ( CALCULATE ( MAX ( Assets[RiskScore] ) ), 0 )
+)
+
+// 19. Dynamic priority rank inside the current report filter context
+Asset Group Priority Rank :=
+RANKX (
+    ALLSELECTED ( Assets[AssetGroup] ),
+    CALCULATE ( [Risk Weighted Asset Score] ),
+    ,
+    DESC,
+    DENSE
+)
